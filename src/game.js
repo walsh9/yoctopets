@@ -25,39 +25,31 @@ function drawText(x, y, text) {
   }
 }
 
-function drawScreen(){
-  Game.Graphics.clearScreen();
-  drawCreature(creature, creatureX, creatureMood);
-}
-
 var imageData, fontData, creatureTiles, fontTiles;
 var letters='abcdefghijklmnopqrstuvwxyz1234567890.!?><+- #|\_:;';
+
+function initGame(imageData) {
+  creatureTiles = imageData[0];
+  creatureTiles.tileWidth = CREATURE_TILE_WIDTH;
+  creatureTiles.tileHeight = CREATURE_TILE_HEIGHT;
+
+  fontTiles = imageData[1];
+  fontTiles.tileWidth = FONT_TILE_WIDTH;
+  fontTiles.tileHeight = FONT_TILE_HEIGHT;
+
+  Game.Screens.open(Game.Screens.Main);
+}
+
+function run() {
+  Game.Screens.updateCurrent();
+  Game.Screens.renderCurrent();
+  setTimeout(run, 400);
+}
 
 Promise.all([Game.Graphics.createImgData(CREATURE_TILE_DATA),
              Game.Graphics.createImgData(FONT_TILE_DATA)])
 .then(function(iData) {
-  creatureTiles = iData[0];
-  creatureTiles.tileWidth = CREATURE_TILE_WIDTH;
-  creatureTiles.tileHeight = CREATURE_TILE_HEIGHT;
-
-  fontTiles = iData[1];
-  fontTiles.tileWidth = FONT_TILE_WIDTH;
-  fontTiles.tileHeight = FONT_TILE_HEIGHT;
-
+  initGame(iData);
   run();
 });
-
-function updateCreature() {
-  creatureX += Math.random() > 0.5 ? 1 : -1;
-  creatureMood = creatureMood ? 0 : 1;
-  creatureMood = Math.floor(Math.random() * 2);
-}
-
-function run() {
-  updateCreature();
-  drawScreen();
-  setTimeout(run, 400);
-}
-
-
 

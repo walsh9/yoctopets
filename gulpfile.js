@@ -14,6 +14,7 @@ var concatOrder = [
   'src/config.js',
   'src/sound.js',
   'src/graphics.js',
+  'src/screens.js',
   'src/game.js',      
 ];
 
