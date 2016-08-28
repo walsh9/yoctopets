@@ -1,3 +1,4 @@
+var AudioContext = window.AudioContext || window.webkitAudioContext;
 var A_CTX = new AudioContext();
 
 Game.Sound = {};
@@ -11,7 +12,8 @@ Game.Sound.beep = function(frequency, frequency2, type, durationSeconds) {
 
     osc.type = type;
     osc.frequency.setValueAtTime(frequency, A_CTX.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(frequency2, A_CTX.currentTime + durationSeconds);
+    osc.frequency.exponentialRampToValueAtTime(frequency2, A_CTX.currentTime + durationSeconds/2);
+    osc.frequency.exponentialRampToValueAtTime(frequency, A_CTX.currentTime + durationSeconds);
 
     gainOsc.gain.setValueAtTime(1, A_CTX.currentTime);
     gainOsc.gain.exponentialRampToValueAtTime(0.001, A_CTX.currentTime + durationSeconds);
