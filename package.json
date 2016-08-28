@@ -1,0 +1,23 @@
+{
+  "name": "js13k2016",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matt Walsh <walsh9@gmail.com> (https://walsh9.net)",
+  "license": "MIT",
+  "devDependencies": {
+    "del": "^2.2.2",
+    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-clean-css": "^2.0.12",
+    "gulp-closure-compiler": "^0.4.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-htmlmin": "^2.0.0",
+    "gulp-imageoptim": "^1.0.4",
+    "gulp-inline": "^0.1.1",
+    "gulp-js-base64-inject": "^1.0.0",
+    "gulp-zip": "^3.2.0"
+  }
+}
