@@ -1,57 +1,62 @@
-Game.Screens = {};
+/** @constructor */
+var ScreenManager = function(sound) {
+  this.screenStack = [];
+  this.sound = sound;
+};
 
-Game.Screens.screenStack = [];
-
-Game.Screens.getCurrent = function() {
-  if (Game.Screens.screenStack.length > 0) {
-    return Game.Screens.screenStack.slice(-1)[0];
+ScreenManager.prototype.getCurrent = function() {
+  if (this.screenStack.length > 0) {
+    return this.screenStack.slice(-1)[0];
   } else {
-    return Game.Screens.Null;
+    return Game.ScreenTemplates.Null;
   }
 };
 
-Game.Screens.Null = {
-  init: function() {},
-  render: function() {},
-  update: function() {},
-  actions: {},
+ScreenManager.prototype.renderCurrent = function(display, timeDelta) {
+  this.getCurrent().render(display, timeDelta);
 };
 
-Game.Screens.renderCurrent = function() {
-  Game.Screens.getCurrent().render();
+ScreenManager.prototype.updateCurrent = function() {
+  this.getCurrent().update();
 };
 
-Game.Screens.updateCurrent = function() {
-  Game.Screens.getCurrent().update();
-};
-
-Game.Screens.sendCurrent = function(eventName) {
-  var currentScreen = Game.Screens.getCurrent();
+ScreenManager.prototype.sendCurrent = function(eventName) {
+  var currentScreen = this.getCurrent();
   var params = Array.prototype.slice.call(arguments, 1);
   if (typeof currentScreen.actions[eventName] === 'function') {
     currentScreen.actions[eventName].apply(currentScreen, params);
   }
 };
 
-Game.Screens.closeCurrent = function() {
-  Game.Screens.sendCurrent('switchOut');
-  Game.Screens.screenStack.pop();
-  Game.Screens.sendCurrent('switchIn');
+ScreenManager.prototype.closeCurrent = function() {
+  this.sendCurrent('switchOut');
+  this.screenStack.pop();
+  this.sendCurrent('switchIn');
 };
 
-Game.Screens.open = function(screen) {
-  Game.Screens.sendCurrent('switchOut');
-  screen.init();
-  Game.Screens.screenStack.push(screen);
+ScreenManager.prototype.open = function(screen) {
+  this.sendCurrent('switchOut');
+  screen.init(this.sound);
+  this.screenStack.push(screen);
 };
 
-Game.Screens.Main = {
-  init: function() {
-    Game.Screens.Main.selectedOption = 0;
+Game.ScreenTemplates = {};
+
+Game.ScreenTemplates.Null = {
+  init: function() {},
+  render: function() {},
+  update: function() {},
+  actions: {},
+};
+
+Game.ScreenTemplates.Main = {
+  init: function(sound) {
+    Game.ScreenTemplates.Main.sound = sound;
+    Game.ScreenTemplates.Main.selectedOption = 0;
   },
-  render: function() {
-    Game.Graphics.clearScreen();
-    Game.pet.render();
+  render: function(display, timeDelta) {
+    display.clearScreen();
+    Game.pet.render(display, timeDelta);
   },
   update: function() {
     Game.pet.update();

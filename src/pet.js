@@ -1,7 +1,4 @@
-/**
- * A pet.
- * @constructor
- */
+/** @constructor */
 function Pet(options) {
   this.tileData = options.tileData;
   // form = [head tile row, body tile row] 
@@ -16,11 +13,12 @@ Pet.prototype.update = function(time) {
   this.mood = this.mood ? 0 : 1;
 };
 
-Pet.prototype.render = function() {
-  this._drawPetTile(this.x, 0, this.mood, this.form[0] * 2);
-  this._drawPetTile(this.x, this.tileData.tileHeight, this.mood, this.form[1] * 2 + 1);
+Pet.prototype.render = function(display) {
+  this._drawPetTile(display, this.x, 0, this.mood, this.form[0] * 2);
+  this._drawPetTile(display, this.x, this.tileData.tileHeight, this.mood, this.form[1] * 2 + 1);
 };
 
-Pet.prototype._drawPetTile = function(x, y, column, row) {
-  Game.Graphics.drawTile(this.tileData, column, row, x, y);
+/** @private */
+Pet.prototype._drawPetTile = function(display, x, y, column, row) {
+  display.drawTile(this.tileData, column, row, x, y);
 };

@@ -1,6 +1,7 @@
 var Game = {};
 
-var DISPLAY_TILE_SIZE = 10;
+var CANVAS = document.querySelector('canvas');
+var PIXEL_SIZE = 10;
 
 var PET_TILE_DATA = '@@import data.png';
 var PET_TILE_WIDTH = 16;

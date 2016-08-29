@@ -1,41 +1,43 @@
-var audioContext = window.AudioContext || window.webkitAudioContext;
-var A_CTX = new audioContext();
+/** @constructor */
+var BeepMaker = function () {
+  var audioContext = window.AudioContext || window.webkitAudioContext;
+  this.context = new audioContext();
+  this.muted = false;
+};
 
-Game.Sound = {};
-
-Game.Sound.muted = false;
-
-Game.Sound.beep = function(frequency, frequency2, type, durationSeconds) {
-  if (!Game.Sound.muted) {
-    var osc = A_CTX.createOscillator();
-    var gainOsc = A_CTX.createGain();
-
-    osc.type = type;
-    osc.frequency.setValueAtTime(frequency, A_CTX.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(frequency2, A_CTX.currentTime + durationSeconds/2);
-    osc.frequency.exponentialRampToValueAtTime(frequency, A_CTX.currentTime + durationSeconds);
-
-    gainOsc.gain.setValueAtTime(1, A_CTX.currentTime);
-    gainOsc.gain.exponentialRampToValueAtTime(0.001, A_CTX.currentTime + durationSeconds);
-
-    osc.connect(gainOsc);
-    gainOsc.connect(A_CTX.destination);
-
-    osc.start(A_CTX.currentTime);
-    osc.stop(A_CTX.currentTime + durationSeconds);
+BeepMaker.prototype.beep = function(frequency, frequency2, type, durationSeconds) {
+  if (this.muted) {
+    return;
   }
+  var ctx = this.context;
+  var osc = ctx.createOscillator();
+  var gainOsc = ctx.createGain();
+
+  osc.type = type;
+  osc.frequency.setValueAtTime(frequency, ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(frequency2, ctx.currentTime + durationSeconds/2);
+  osc.frequency.exponentialRampToValueAtTime(frequency, ctx.currentTime + durationSeconds);
+
+  gainOsc.gain.setValueAtTime(1, ctx.currentTime);
+  gainOsc.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + durationSeconds);
+
+  osc.connect(gainOsc);
+  gainOsc.connect(ctx.destination);
+
+  osc.start(ctx.currentTime);
+  osc.stop(ctx.currentTime + durationSeconds);
 };
 
-Game.Sound.toggleMute = function() {
-  Game.Sound.muted = !Game.Sound.muted;
-  return Game.Sound.muted;
+BeepMaker.prototype.toggleMute = function() {
+  this.muted = !this.muted;
+  return this.muted;
 };
 
-Game.Sound.mute = function() {
-  Game.Sound.muted = true;
+BeepMaker.prototype.mute = function() {
+  this.muted = true;
 };
 
-Game.Sound.unmute = function() {
-  Game.Sound.muted = false;
+BeepMaker.prototype.unmute = function() {
+  this.muted = false;
 };
 
