@@ -26,16 +26,15 @@ var PixelDisplay = function(canvas, pixelSize) {
   this.pixelSize = pixelSize;
 };
 
-PixelDisplay.prototype.drawPixel = {
-  on: function(x, y) {
+PixelDisplay.prototype.drawPixel = function (x, y, on){
+  if (on) {
     this.ctx.fillStyle = 'rgba(40, 40, 40, 0.85)';
     this.ctx.shadowOffsetX = 1;
     this.ctx.shadowOffsetY = 1;
     this.ctx.shadowBlur =  2;
     this.ctx.shadowColor = '#888';
     this.ctx.fillRect(x * this.pixelSize + 1, y * this.pixelSize + 1, this.pixelSize - 1 * 2, this.pixelSize - 1 * 2);
-  },
-  off: function(x, y) { 
+  } else {
     this.ctx.fillStyle = 'rgba(40, 40, 40, 0.05)';
     this.ctx.fillRect(x * this.pixelSize + 1, y * this.pixelSize + 1, this.pixelSize - 1 * 2, this.pixelSize - 1 * 2);
   }
@@ -49,7 +48,7 @@ PixelDisplay.prototype.drawTile = function(tileData, tileCol, tileRow, screenX, 
     var tileY = tileRow * tileData.tileHeight + yOffset;
     var tilePixel = (tileX + tileY * tileData.width) * 4 + 3;
     if (tileData.data[tilePixel]) {
-      this.drawPixel.on(screenX + xOffset, screenY + yOffset);
+      this.drawPixel(screenX + xOffset, screenY + yOffset, true);
     }
   }
 };
@@ -59,7 +58,7 @@ PixelDisplay.prototype.clearScreen = function() {
   this.ctx.fillRect(0, 0, this.w, this.h);
   for (var x = 0; x < this.w; x++) {
     for (var y = 0; y < this.h; y++) {
-      this.drawPixel.off(x, y);
+      this.drawPixel(x, y, false);
     }
   }
 };
