@@ -1,5 +1,5 @@
-var AudioContext = window.AudioContext || window.webkitAudioContext;
-var A_CTX = new AudioContext();
+var audioContext = window.AudioContext || window.webkitAudioContext;
+var A_CTX = new audioContext();
 
 Game.Sound = {};
 
