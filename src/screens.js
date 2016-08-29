@@ -56,14 +56,14 @@ Game.ScreenTemplates.Main = {
   },
   render: function(display, timeDelta) {
     display.clearScreen();
-    Game.pet.render(display, timeDelta);
+    Game.Pet.render(display, timeDelta);
   },
   update: function() {
-    Game.pet.update();
+    Game.Pet.update();
   },
   actions: {
     'switchIn': function() {
-      Game.pet.x = 8;
+      Game.Pet.x = 8;
     }
   }
 };

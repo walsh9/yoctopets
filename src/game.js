@@ -10,13 +10,11 @@ function initGame(imageData) {
   Game.Sound = new BeepMaker();
   Game.Display = new PixelDisplay(CANVAS, PIXEL_SIZE);
 
-  Game.pet = new Pet({tileData: petTiles});
-  
-  Game.Text = new TextDrawer(
-    fontTiles, 
-    'abcdefghijklmnopqrstuvwxyz1234567890.!?><+- #|\_:;',
-    Game.Display
-  );
+  Game.Pet = new Pet({tileData: petTiles});
+  Game.Text = new TextDrawer({
+    tileData: fontTiles, 
+    letters: 'abcdefghijklmnopqrstuvwxyz1234567890.!?><+- #|\_:;'
+  });
 
   Game.Screens = new ScreenManager(Game.Sound);
   Game.Screens.open(Game.ScreenTemplates.Main);
