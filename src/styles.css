@@ -28,10 +28,12 @@ img {
   background: #DCF0E6;
 }
 #buttons {
+  text-align: center;
   width: 310px;
-  margin: 30px auto;
+  margin: 30px auto 10px;
 }
 button {
+  display: inline-block;
   font-size: 28px;
   color: hsl(182, 100%, 30%);
   text-shadow: -1px -1px 0px rgba(0,0,0,0.5);
