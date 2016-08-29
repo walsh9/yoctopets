@@ -1,10 +1,10 @@
 Game.Screens = {};
 
-Game.Screens.stack = [];
+Game.Screens.screenStack = [];
 
 Game.Screens.getCurrent = function() {
-  if (this.stack.length > 0) {
-    return this.stack.slice(-1)[0];
+  if (this.screenStack.length > 0) {
+    return this.screenStack.slice(-1)[0];
   } else {
     return Game.Screens.Null;
   }
@@ -14,9 +14,7 @@ Game.Screens.Null = {
   init: function() {},
   render: function() {},
   update: function() {},
-  onSwitchIn: function() {},
-  onSwitchOut: function() {},
-  on: function() {}
+  actions: {},
 };
 
 Game.Screens.renderCurrent = function() {
@@ -27,20 +25,24 @@ Game.Screens.updateCurrent = function() {
   this.getCurrent().update();
 };
 
-Game.Screens.sendCurrent = function(event) {
-  this.getCurrent().on(event);
+Game.Screens.sendCurrent = function(eventName) {
+  var currentScreen = this.getCurrent();
+  var params = Array.prototype.slice.call(arguments, 1);
+  if (typeof currentScreen.actions[eventName] === 'function') {
+    currentScreen.actions[eventName].apply(currentScreen, params);
+  }
 };
 
 Game.Screens.closeCurrent = function() {
-  this.getCurrent().onSwitchOut();
-  this.stack.pop();
-  this.getCurrent().onSwitchIn();
+  this.sendCurrent('switchOut');
+  this.screenStack.pop();
+  this.sendCurrent('switchIn');
 };
 
 Game.Screens.open = function(screen) {
-  this.getCurrent().onSwitchOut();
+  this.sendCurrent('switchOut');
   screen.init();
-  this.stack.push(screen);
+  this.screenStack.push(screen);
 };
 
 Game.Screens.Main = {
@@ -56,13 +58,9 @@ Game.Screens.Main = {
     creatureMood = creatureMood ? 0 : 1;
     creatureMood = Math.floor(Math.random() * 2);
   },
-  onSwitchIn: function() {
-    creatureX = 8;
-  },
-  onSwitchOut: function() {
-
-  },
-  on: function(event) {
-
+  actions: {
+    'switchIn': function() {
+      creatureX = 8;
+    }
   }
 };
