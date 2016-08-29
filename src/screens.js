@@ -3,8 +3,8 @@ Game.Screens = {};
 Game.Screens.screenStack = [];
 
 Game.Screens.getCurrent = function() {
-  if (this.screenStack.length > 0) {
-    return this.screenStack.slice(-1)[0];
+  if (Game.Screens.screenStack.length > 0) {
+    return Game.Screens.screenStack.slice(-1)[0];
   } else {
     return Game.Screens.Null;
   }
@@ -18,15 +18,15 @@ Game.Screens.Null = {
 };
 
 Game.Screens.renderCurrent = function() {
-  this.getCurrent().render();
+  Game.Screens.getCurrent().render();
 };
 
 Game.Screens.updateCurrent = function() {
-  this.getCurrent().update();
+  Game.Screens.getCurrent().update();
 };
 
 Game.Screens.sendCurrent = function(eventName) {
-  var currentScreen = this.getCurrent();
+  var currentScreen = Game.Screens.getCurrent();
   var params = Array.prototype.slice.call(arguments, 1);
   if (typeof currentScreen.actions[eventName] === 'function') {
     currentScreen.actions[eventName].apply(currentScreen, params);
@@ -34,20 +34,20 @@ Game.Screens.sendCurrent = function(eventName) {
 };
 
 Game.Screens.closeCurrent = function() {
-  this.sendCurrent('switchOut');
-  this.screenStack.pop();
-  this.sendCurrent('switchIn');
+  Game.Screens.sendCurrent('switchOut');
+  Game.Screens.screenStack.pop();
+  Game.Screens.sendCurrent('switchIn');
 };
 
 Game.Screens.open = function(screen) {
-  this.sendCurrent('switchOut');
+  Game.Screens.sendCurrent('switchOut');
   screen.init();
-  this.screenStack.push(screen);
+  Game.Screens.screenStack.push(screen);
 };
 
 Game.Screens.Main = {
   init: function() {
-    this.selectedOption = 0;
+    Game.Screens.Main.selectedOption = 0;
   },
   render: function() {
     Game.Graphics.clearScreen();

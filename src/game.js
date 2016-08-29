@@ -7,7 +7,7 @@ function initGame(imageData) {
   fontTiles.tileWidth = FONT_TILE_WIDTH;
   fontTiles.tileHeight = FONT_TILE_HEIGHT;
 
-  Game.pet = Object.create(Pet).init({tileData: petTiles});
+  Game.pet = new Pet({tileData: petTiles});
   Game.Text.init({
     tileData: fontTiles, 
     letters:'abcdefghijklmnopqrstuvwxyz1234567890.!?><+- #|\_:;'
