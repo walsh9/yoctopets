@@ -4,6 +4,7 @@ var W = CANVAS.width;
 var H = CANVAS.height;
 
 Game.Graphics = {};
+
 Game.Graphics.createImgData = function(imageSource) {
   return new Promise(function(resolve) {
     var imageElement = document.createElement('img');

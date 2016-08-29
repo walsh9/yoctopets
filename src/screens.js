@@ -51,16 +51,14 @@ Game.Screens.Main = {
   },
   render: function() {
     Game.Graphics.clearScreen();
-    drawCreature(creature, creatureX, creatureMood);
+    Game.pet.render();
   },
   update: function() {
-    creatureX += Math.random() > 0.5 ? 1 : -1;
-    creatureMood = creatureMood ? 0 : 1;
-    creatureMood = Math.floor(Math.random() * 2);
+    Game.pet.update();
   },
   actions: {
     'switchIn': function() {
-      creatureX = 8;
+      Game.pet.x = 8;
     }
   }
 };
