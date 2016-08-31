@@ -8,7 +8,7 @@ ScreenManager.prototype.getCurrent = function() {
   if (this.screenStack.length > 0) {
     return this.screenStack.slice(-1)[0];
   } else {
-    return Game.ScreenTemplates.Null;
+    return new NullScreen();
   }
 };
 
@@ -16,8 +16,8 @@ ScreenManager.prototype.renderCurrent = function(display, timeDelta) {
   this.getCurrent().render(display, timeDelta);
 };
 
-ScreenManager.prototype.updateCurrent = function() {
-  this.getCurrent().update();
+ScreenManager.prototype.updateCurrent = function(time) {
+  this.getCurrent().update(time);
 };
 
 ScreenManager.prototype.sendCurrent = function(eventName) {
@@ -36,34 +36,48 @@ ScreenManager.prototype.closeCurrent = function() {
 
 ScreenManager.prototype.open = function(screen) {
   this.sendCurrent('switchOut');
-  screen.init(this.sound);
   this.screenStack.push(screen);
 };
 
-Game.ScreenTemplates = {};
-
-Game.ScreenTemplates.Null = {
-  init: function() {},
-  render: function() {},
-  update: function() {},
-  actions: {},
+/** @constructor */
+var NullScreen = function() {
+  this.actions = {};
 };
+NullScreen.prototype.render  = function() {};
+NullScreen.prototype.update  = function() {};
 
-Game.ScreenTemplates.Main = {
-  init: function(sound) {
-    Game.ScreenTemplates.Main.sound = sound;
-    Game.ScreenTemplates.Main.selectedOption = 0;
-  },
-  render: function(display, timeDelta) {
-    display.clearScreen();
-    Game.Pet.render(display, timeDelta);
-  },
-  update: function() {
-    Game.Pet.update();
-  },
-  actions: {
+/** @constructor */
+var MainScreen = function(sound) {
+  this.sound = sound;
+  this.selectedIcon = 0;
+  this.actions = {
     'switchIn': function() {
       Game.Pet.x = 8;
-    }
-  }
+    },
+    'left': function() {
+      var nextIcon = this.selectedIcon > 0 ? this.selectedIcon - 1 : 7;
+      this._switchIcon(nextIcon);
+    },
+    'right': function() {
+      var nextIcon = this.selectedIcon < 7 ? this.selectedIcon + 1 : 0;
+      this._switchIcon(nextIcon);
+    },
+  };
 };
+MainScreen.prototype.render = function(display) {
+  display.clearScreen();
+  Game.Pet.render(display);  
+};
+MainScreen.prototype.update  = function() {};
+/** @private */
+MainScreen.prototype._switchIcon = function(i) {
+  var currentIcon = document.querySelector('#i-' + this.selectedIcon);
+  var newIcon = document.querySelector('#i-' + i);
+  currentIcon.setAttribute('class', '');
+  newIcon.setAttribute('class', 'active');
+  this.selectedIcon = i;
+};
+
+
+
+

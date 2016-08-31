@@ -22,7 +22,7 @@ img {
 }
 #screen {
   box-shadow: 0 0 5px 1px rgba(0,0,0,0.5) inset;
-  padding: 40px 5px;
+  padding: 5px 5px;
   width: 330px;
   margin: auto;
   background: #DCF0E6;
@@ -59,4 +59,18 @@ canvas {
   display: block;
   width: 320px;
   margin: auto;
+}
+.icons {
+  width: 100%;
+  text-align: center;
+}
+i {
+  display: inline-block;
+  margin: 5px 20px;
+  width: 20px;
+  height: 20px;
+  background: #bbb;
+}
+i.active {
+  background: #333;
 }

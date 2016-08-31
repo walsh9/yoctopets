@@ -16,14 +16,27 @@ function initGame(imageData) {
     letters: 'abcdefghijklmnopqrstuvwxyz1234567890.!?><+- #|\_:;'
   });
 
-  Game.Screens = new ScreenManager(Game.Sound);
-  Game.Screens.open(Game.ScreenTemplates.Main);
+  Game.Screen = new ScreenManager(Game.Sound);
+
+  function bindInput(id, message, callback, context) {
+    document.querySelector('#' + id).addEventListener('click', function() {
+      callback.call(context, message);
+    });
+  }
+  bindInput('l', 'left', Game.Screen.sendCurrent, Game.Screen);
+  bindInput('r', 'right', Game.Screen.sendCurrent, Game.Screen);
+  bindInput('y', 'yes', Game.Screen.sendCurrent, Game.Screen);
+  bindInput('n', 'no', Game.Screen.sendCurrent, Game.Screen);
+
+  Game.Screen.open(new MainScreen(Game.Sound));
 }
 
+var timeStep = 400;
 function run() {
-  Game.Screens.updateCurrent();
-  Game.Screens.renderCurrent(Game.Display, 400);
-  setTimeout(run, 400);
+  Game.Pet.update(timeStep);
+  Game.Screen.updateCurrent(timeStep);
+  Game.Screen.renderCurrent(Game.Display);
+  setTimeout(run, timeStep);
 }
 
 Promise.all([CreateImgData(PET_TILE_DATA), CreateImgData(FONT_TILE_DATA)])
