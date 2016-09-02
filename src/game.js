@@ -13,7 +13,7 @@ function initGame(imageData) {
   Game.Pet = new Pet({tileData: petTiles});
   Game.Text = new TextDrawer({
     tileData: fontTiles, 
-    letters: 'abcdefghijklmnopqrstuvwxyz1234567890.!?><+- #|\_:;'
+    letters: "abcdefghijklmnopqrstuvwxyz1234567890.!?:;+-'\" <>()[]{}#|"
   });
 
   Game.Screen = new ScreenManager(Game.Sound);
