@@ -12,8 +12,8 @@ ScreenManager.prototype.getCurrent = function() {
   }
 };
 
-ScreenManager.prototype.renderCurrent = function(display, timeDelta) {
-  this.getCurrent().render(display, timeDelta);
+ScreenManager.prototype.renderCurrent = function(display) {
+  this.getCurrent().render(display);
 };
 
 ScreenManager.prototype.updateCurrent = function(time) {
@@ -36,6 +36,7 @@ ScreenManager.prototype.closeCurrent = function() {
 
 ScreenManager.prototype.open = function(screen) {
   this.sendCurrent('switchOut');
+  screen.manager = this;
   this.screenStack.push(screen);
 };
 
@@ -54,14 +55,17 @@ var MainScreen = function(sound) {
     'switchIn': function() {
       Game.Pet.x = 8;
     },
-    'left': function() {
-      var nextIcon = this.selectedIcon > 0 ? this.selectedIcon - 1 : 7;
-      this._switchIcon(nextIcon);
-    },
     'right': function() {
-      var nextIcon = this.selectedIcon < 7 ? this.selectedIcon + 1 : 0;
+      var nextIcon = Math.mod(this.selectedIcon + 1, 7);
       this._switchIcon(nextIcon);
     },
+    'left': function() {
+      var nextIcon = Math.mod(this.selectedIcon - 1, 7);
+      this._switchIcon(nextIcon);
+    },
+    'yes': function() {
+      this.manager.open(new StatScreen(this.sound));
+    }
   };
 };
 MainScreen.prototype.render = function(display) {
@@ -76,8 +80,49 @@ MainScreen.prototype._switchIcon = function(i) {
   currentIcon.setAttribute('class', '');
   newIcon.setAttribute('class', 'active');
   this.selectedIcon = i;
+  this.sound.beep(2000, 3100, 'square', 0.2);
 };
 
-
-
-
+/** @constructor */
+var StatScreen = function(sound) {
+  this.sound = sound;
+  this.currentPage = 0;
+  this.actions = {
+    'yes': function() {
+      this.manager.closeCurrent();
+    },
+    'no': function() {
+      this.manager.closeCurrent();
+    },
+    'right': function() {
+      this.currentPage = Math.mod(this.currentPage + 1, 4);
+    },
+    'left': function() {
+      this.currentPage = Math.mod(this.currentPage - 1, 4);
+    },
+  };
+};
+StatScreen.prototype.update = function() {};
+StatScreen.prototype.render = function(display) {
+  display.clearScreen();
+  var age = 'yrs ' + Math.floor(Game.Pet.millisecondsAlive / 30000);
+  var weight = 'lbs ' + Math.floor(Game.Pet.weight * 10) / 10;
+  switch(this.currentPage) {
+    case 0:
+      Game.Text.drawText(display, 2, 1, age);
+      Game.Text.drawText(display, 2, 7, weight);
+    break;
+    case 1:
+      Game.Text.drawText(display, 2, 1, 'hungry');
+      Game.Text.drawMeter(display, Game.Pet.hungry);
+    break;
+    case 2:
+      Game.Text.drawText(display, 2, 1, 'bored');
+      Game.Text.drawMeter(display, Game.Pet.bored);
+    break;
+    case 3:
+      Game.Text.drawText(display, 2, 1, 'filthy');
+      Game.Text.drawMeter(display, Game.Pet.filthy);
+  }
+  Game.Text.drawArrows(display);
+};

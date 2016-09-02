@@ -11,7 +11,18 @@ TextDrawer.prototype.drawLetter = function(display, x, y, letter) {
 
 TextDrawer.prototype.drawText = function(display, x, y, text) {
   for (var i = 0; i < text.length; i++) {
-    console.log(x + i * (this.tileData.tileWidth + 1));
     this.drawLetter(display, x + i * (this.tileData.tileWidth + 1), y, text.charAt(i));
   }
+};
+
+TextDrawer.prototype.drawArrows = function(display) {
+  Game.Text.drawText(display, 0, 12, '<');
+  Game.Text.drawText(display, 29, 12, '>');
+};
+
+TextDrawer.prototype.drawMeter = function(display, n) {
+  n = Math.min(n, 100);
+  var bars = Math.floor(n/100 * 7);
+  var meter = '#######'.slice(0, bars) + '|||||||'.slice(0, 7 - bars);
+  Game.Text.drawText(display, 2, 7, meter);
 };

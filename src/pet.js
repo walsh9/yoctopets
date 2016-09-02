@@ -3,10 +3,13 @@ function Pet(options) {
   this.tileData = options.tileData;
   this.sound = options.sound;
   // form = [head tile row, body tile row] 
-  this.form = [Math.floor(Math.random() * 8), Math.floor(Math.random() * 8)];
+  var baseForm = Math.floor(Math.random() * 8);
+  this.form = [baseForm, baseForm];
   this.x = 9;
+  this.frames = [0,1];
   this.mood = 0;
   this.millisecondsAlive = 0;
+  this.weight = 0.5;
 
   this.bored  = 0;
   this.hungry = 0;
@@ -67,33 +70,36 @@ Pet.prototype.update = function(time) {
   this.mood = this.mood ? 0 : 1;
 };
 
-Pet.prototype.feed = function(food) {
-  pet.hungry -= food.nutrition;
-  pet.sick += food.junk;
-};
+// Pet.prototype.feed = function(food) {
+//   this.hungry -= food.nutrition;
+//   this.sick += food.junk;
+// };
 
 Pet.prototype.whine = function() {
   console.log('WAA');
+  this.frames = [0, 6];
   this.whining = true;
 };
 
 Pet.prototype.stopWhining = function() {
   this.whining = false;
+  this.frames = [0, 1];
   this.whineCooldown = 10;
 };
 
 
 Pet.prototype.debugStats = function() {
-  console.log('BORED:  ', parseInt(this.bored));
-  console.log('HUNGRY: ', parseInt(this.hungry));
-  console.log('FILTHY: ', parseInt(this.filthy));
-  console.log('SICK:   ', parseInt(this.sick));
+  console.log('BORED:  ', parseInt(this.bored, 10));
+  console.log('HUNGRY: ', parseInt(this.hungry, 10));
+  console.log('FILTHY: ', parseInt(this.filthy, 10));
+  console.log('SICK:   ', parseInt(this.sick, 10));
   console.log('WHINING:', this.whining, this.whineCooldown);
 };
 
 Pet.prototype.render = function(display) {
-  this._drawPetTile(display, this.x, 0, this.mood, this.form[0] * 2);
-  this._drawPetTile(display, this.x, this.tileData.tileHeight, this.mood, this.form[1] * 2 + 1);
+  var currentFrame = Math.floor(this.millisecondsAlive) % 800 >= 400 ? this.frames[0] : this.frames[1];
+  this._drawPetTile(display, this.x, 0, currentFrame, this.form[0] * 2);
+  this._drawPetTile(display, this.x, this.tileData.tileHeight, currentFrame, this.form[1] * 2 + 1);
 };
 
 /** @private */
