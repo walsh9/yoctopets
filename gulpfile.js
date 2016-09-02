@@ -12,6 +12,7 @@ var inject = require('gulp-js-base64-inject');
 
 var concatOrder = [
   'src/config.js',
+  'src/util.js',
   'src/sound.js',
   'src/graphics.js',
   'src/text.js',
