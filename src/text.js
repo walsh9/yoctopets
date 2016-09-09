@@ -10,6 +10,9 @@ TextDrawer.prototype.drawLetter = function(display, x, y, letter) {
 };
 
 TextDrawer.prototype.drawText = function(display, x, y, text) {
+  if (x === 'center') {
+    x = Math.floor((display.pixelWidth - text.length * (this.tileData.tileWidth + 1)) / 2);
+  }
   for (var i = 0; i < text.length; i++) {
     this.drawLetter(display, x + i * (this.tileData.tileWidth + 1), y, text.charAt(i));
   }

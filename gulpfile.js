@@ -7,6 +7,7 @@ var zip = require('gulp-zip');
 var cleanCSS = require('gulp-clean-css');
 var imageOptim = require('gulp-imageoptim');
 var inline = require('gulp-inline');
+var inlineBase64 = require('gulp-inline-base64');
 var htmlmin = require('gulp-htmlmin');
 var inject = require('gulp-js-base64-inject');
 
@@ -16,7 +17,9 @@ var concatOrder = [
   'src/sound.js',
   'src/graphics.js',
   'src/text.js',
+  'src/food.js',
   'src/pet.js',
+  'src/printer.js',
   'src/screens.js',
   'src/game.js',      
 ];
@@ -74,6 +77,7 @@ gulp.task('minify:js', function() {
 
 gulp.task('minify:css', function() {
   return gulp.src('src/*.css')
+    .pipe(inlineBase64({baseDir: 'src/'}))
     .pipe(cleanCSS({compatibility: 'ie8'}))
     .pipe(gulp.dest('build'));
 });
@@ -116,14 +120,21 @@ gulp.task('build:dev', function() {
     .pipe(gulp.dest('dev'));
 });
 
+gulp.task('css:dev', function() {
+  return gulp.src('src/*.css')
+    .pipe(inlineBase64({baseDir: 'src/'}))
+    .pipe(gulp.dest('dev'));
+});
+
 gulp.task('copy:dev', function() {
-  return gulp.src('src/*.{html,css}')
+  return gulp.src('src/*.{html}')
     .pipe(gulp.dest('dev'));
 });
 
 gulp.task('watch', function() {
   gulp.watch('src/*.js', gulp.series('build:dev'));
-  gulp.watch('src/*.{html,css}', gulp.series('copy:dev'));
+  gulp.watch('src/*.{html}', gulp.series('copy:dev'));
+  gulp.watch('src/*.{css}', gulp.series('css:dev'));;
 });
 
 

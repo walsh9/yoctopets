@@ -7,6 +7,7 @@ function Pet(options) {
   this.form = [baseForm, baseForm];
   this.x = 9;
   this.frames = [0,1];
+  this.dirs = [0,0];
   this.mood = 0;
   this.millisecondsAlive = 0;
   this.weight = 0.5;
@@ -97,12 +98,12 @@ Pet.prototype.debugStats = function() {
 };
 
 Pet.prototype.render = function(display) {
-  var currentFrame = Math.floor(this.millisecondsAlive) % 800 >= 400 ? this.frames[0] : this.frames[1];
-  this._drawPetTile(display, this.x, 0, currentFrame, this.form[0] * 2);
-  this._drawPetTile(display, this.x, this.tileData.tileHeight, currentFrame, this.form[1] * 2 + 1);
+  var currentFrame = Game.ticks % 2 ? this.frames[0] : this.frames[1];
+  this._drawPetTile(display, this.x, 0, currentFrame, this.form[0] * 2, this.dirs[0]);
+  this._drawPetTile(display, this.x, this.tileData.tileHeight, currentFrame, this.form[1] * 2 + 1, this.dirs[1]);
 };
 
 /** @private */
-Pet.prototype._drawPetTile = function(display, x, y, column, row) {
-  display.drawTile(this.tileData, column, row, x, y);
+Pet.prototype._drawPetTile = function(display, x, y, column, row, reversed) {
+  display.drawTile(this.tileData, column, row, x, y, reversed);
 };

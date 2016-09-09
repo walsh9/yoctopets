@@ -5,7 +5,7 @@ var BeepMaker = function () {
   this.muted = false;
 };
 
-BeepMaker.prototype.beep = function(frequency, frequency2, type, durationSeconds) {
+BeepMaker.prototype.beep = function(frequency, frequency2, type, durationSeconds, volume) {
   if (this.muted) {
     return;
   }
@@ -13,12 +13,13 @@ BeepMaker.prototype.beep = function(frequency, frequency2, type, durationSeconds
   var osc = ctx.createOscillator();
   var gainOsc = ctx.createGain();
 
+  var vol = volume || 1;
   osc.type = type;
   osc.frequency.setValueAtTime(frequency, ctx.currentTime);
   osc.frequency.exponentialRampToValueAtTime(frequency2, ctx.currentTime + durationSeconds/2);
   osc.frequency.exponentialRampToValueAtTime(frequency, ctx.currentTime + durationSeconds);
 
-  gainOsc.gain.setValueAtTime(1, ctx.currentTime);
+  gainOsc.gain.setValueAtTime(vol, ctx.currentTime);
   gainOsc.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + durationSeconds);
 
   osc.connect(gainOsc);

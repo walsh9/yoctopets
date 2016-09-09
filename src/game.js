@@ -1,15 +1,16 @@
 function initGame(imageData) {
-  var petTiles = imageData[0];
-  petTiles.tileWidth = PET_TILE_WIDTH;
-  petTiles.tileHeight = PET_TILE_HEIGHT;
+  var petTiles = Graphics.initTiles(imageData[0], PET_TILE_WIDTH, PET_TILE_HEIGHT);
+  var fontTiles = Graphics.initTiles(imageData[1], FONT_TILE_WIDTH,FONT_TILE_HEIGHT);
+  var foodTiles = Graphics.initTiles(imageData[2], FOOD_TILE_WIDTH,FOOD_TILE_HEIGHT);
 
-  var fontTiles = imageData[1];
-  fontTiles.tileWidth = FONT_TILE_WIDTH;
-  fontTiles.tileHeight = FONT_TILE_HEIGHT;
+  Game.icons = Graphics.initTiles(imageData[3], ICON_TILE_WIDTH, ICON_TILE_HEIGHT);
 
+  Game.ticks = 0;
   Game.Sound = new BeepMaker();
   Game.Display = new PixelDisplay(CANVAS, PIXEL_SIZE);
 
+  Game.Printer = new Printer(Game.Display, Game.Sound, '#p');
+  Game.Food = new Food(FOOD_MENU, foodTiles);
   Game.Pet = new Pet({tileData: petTiles});
   Game.Text = new TextDrawer({
     tileData: fontTiles, 
@@ -33,13 +34,19 @@ function initGame(imageData) {
 
 var timeStep = 400;
 function run() {
+  Game.ticks++;
   Game.Pet.update(timeStep);
   Game.Screen.updateCurrent(timeStep);
   Game.Screen.renderCurrent(Game.Display);
   setTimeout(run, timeStep);
 }
 
-Promise.all([CreateImgData(PET_TILE_DATA), CreateImgData(FONT_TILE_DATA)])
+Promise.all([
+  Graphics.createImgData(PET_TILE_DATA), 
+  Graphics.createImgData(FONT_TILE_DATA),
+  Graphics.createImgData(FOOD_TILE_DATA),
+  Graphics.createImgData(ICON_TILE_DATA)
+  ])
 .then(function(iData) {
   initGame(iData);
   run();

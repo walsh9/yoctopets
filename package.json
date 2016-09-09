@@ -17,6 +17,7 @@
     "gulp-htmlmin": "^2.0.0",
     "gulp-imageoptim": "^1.0.4",
     "gulp-inline": "^0.1.1",
+    "gulp-inline-base64": "^0.1.5",
     "gulp-js-base64-inject": "^1.0.0",
     "gulp-zip": "^3.2.0"
   }

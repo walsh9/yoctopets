@@ -8,12 +8,17 @@ img {
   display: none;
 }
 #case {
+  z-index: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  top: 50px;
   background: hsl(182, 100%, 40%);
   background-image: -webkit-radial-gradient(top, ellipse cover, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
   background-image: radial-gradient(farthest-corner at 0 50%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
   border-radius: 9px;
   width: 360px;
-  margin: 50px auto;
   padding: 20px 0;
   box-shadow: 0 0 5px 8px rgba(0,0,0,0.5);
   box-shadow: inset rgba(255,254,255,0.6) 0 0.3em .3em, inset rgba(0,0,0,0.15) 0 -0.1em .3em, /* inner shadow */ 
@@ -56,7 +61,7 @@ button:active {
   box-shadow: 1px 1px 2px rgba(0,0,0,.2) inset;
 }
 canvas {
-  display: block;
+  display: inline-block;
   width: 320px;
   margin: auto;
 }
@@ -67,10 +72,53 @@ canvas {
 i {
   display: inline-block;
   margin: 5px 20px;
-  width: 20px;
-  height: 20px;
-  background: #bbb;
+  width: 16px;
+  height: 16px;
+  opacity: 0.3;
+  background: url('menu.png');
+}
+#i-1 {
+  background-position: -16px 0;
+}
+#i-2 {
+  background-position: -32px 0;
+}
+#i-3 {
+  background-position: -48px 0;
+}
+#i-4 {
+  background-position: 0px -16px;
+}
+#i-5 {
+  background-position: -16px -16px;
+}
+#i-6 {
+  background-position: -32px -16px;
+}
+#i-7 {
+  background-position: -48px -16px;
 }
 i.active {
-  background: #333;
+ opacity: 0.8;
+}
+#p {
+  position: absolute;
+  width: 280px;
+  top: 282px;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+.paper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  top: 0;
+  background-color: #fcfcfc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), inset 0 0 50px 15px rgba(0, 0, 0, 0.2);
+  background-image: linear-gradint(-45deg, #ffffff 16px, transparent 0), linear-gradient(45deg, #ffffff 16px, transparent 0);
+}
+.paper canvas {
+  width: auto;
 }
