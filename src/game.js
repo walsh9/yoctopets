@@ -17,7 +17,7 @@ function initGame(imageData) {
     letters: "abcdefghijklmnopqrstuvwxyz1234567890.!?:;+-'\" <>()[]{}#|"
   });
 
-  Game.Screen = new ScreenManager(Game.Sound);
+  Game.Screen = new ScreenManager();
 
   function bindInput(id, message, callback, context) {
     document.querySelector('#' + id).addEventListener('click', function() {

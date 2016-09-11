@@ -1,7 +1,6 @@
 /** @constructor */
-var ScreenManager = function(sound) {
+var ScreenManager = function() {
   this.screenStack = [];
-  this.sound = sound;
 };
 
 ScreenManager.prototype.getCurrent = function() {
