@@ -16,6 +16,7 @@ var concatOrder = [
   'src/util.js',
   'src/sound.js',
   'src/graphics.js',
+  'src/pixeldisplay.js',
   'src/text.js',
   'src/food.js',
   'src/pet.js',

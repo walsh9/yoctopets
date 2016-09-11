@@ -64,7 +64,8 @@ var MainScreen = function(game) {
 MainScreen.prototype.render = function(display) {
   display.clearScreen();
   this.pet.render(display);  
-  this.pet.renderStatus(display);  
+  this.pet.renderStatus(display);
+  display.outputBuffer();
 };
 MainScreen.prototype.update  = function() {};
 /** @private */

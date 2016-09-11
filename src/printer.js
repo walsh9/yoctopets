@@ -23,7 +23,7 @@ Printer.prototype.print = function() {
     return 'no ink';
   }
   this.busy = true;
-  var rows = this.display.printableData.slice().map(function(row) {
+  var rows = this.display.displayBuffer.slice().map(function(row) {
     return row.slice();
   }).reverse();
     var canvas = document.createElement('canvas');

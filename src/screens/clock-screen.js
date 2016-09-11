@@ -22,4 +22,6 @@ ClockScreen.prototype.render = function(display) {
   display.clearScreen();
   this.text.drawText(display, 2, 2, hours + ':' + minutes + amPm);
   this.text.drawText(display, 7, 9, year);
+  display.outputBuffer();
+
 };

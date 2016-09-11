@@ -34,4 +34,5 @@ FoodPickerScreen.prototype.render = function(display) {
   this.food.drawFoodTile(display, this.currentPage, this.game.ticks % 2, 12, 0);
   this.text.drawText(display, 'center', 10, this.menu[this.currentPage]);
   this.text.drawArrows(display);
+  display.outputBuffer();
 };

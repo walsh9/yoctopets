@@ -43,4 +43,5 @@ StatScreen.prototype.render = function(display) {
     this.text.drawMeter(display, this.pet.filthy);
   }
   this.text.drawArrows(display);
+  display.outputBuffer();
 };

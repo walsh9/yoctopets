@@ -31,4 +31,5 @@ EatScreen.prototype.render = function(display) {
   if (this.countdown > 1) {
     this.game.Food.drawFoodTile(display, this.foodId, foodFrame, 4, 8); 
   }
+  display.outputBuffer();
 };

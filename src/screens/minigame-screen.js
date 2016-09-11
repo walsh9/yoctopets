@@ -64,6 +64,7 @@ MiniGameScreen.prototype.render = function(display) {
   this.renderCard(display, 2, 0, 8);
   this.renderCard(display, 3, 7, 8);
   this.text.drawText(display, 16, 10, this.selection);
+  display.outputBuffer();
 };
 MiniGameScreen.prototype.toggleSelection = function() {
   if (this.selection === '<hi>') {

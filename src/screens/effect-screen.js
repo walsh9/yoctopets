@@ -17,6 +17,7 @@ HorizontalWipe.prototype.render = function(display) {
   display.drawVerticalLine(32 - this.x, 0, 16, true);
   display.drawVerticalLine(this.x - 1, 0, 16, false);
   display.drawVerticalLine(32 - this.x + 1, 0, 16, false);
+  display.outputBuffer();
 };
 
 var VerticalWipe = function() {
@@ -37,4 +38,5 @@ VerticalWipe.prototype.render = function(display) {
   display.drawHorizontalLine(0, 16 - this.y, 32, true);
   display.drawHorizontalLine(0, this.y - 1, 32, false);
   display.drawHorizontalLine(0, 16 - this.y + 1, 32, false);
+  display.outputBuffer();
 };

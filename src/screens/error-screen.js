@@ -1,7 +1,8 @@
 /** @constructor */
-var ErrorScreen = function(message, time) {
-  this.message = message;
-  this.time = time;
+var ErrorScreen = function(game, params) {
+  this.text = game.Text;
+  this.message = params.message;
+  this.time = parms.duration;
   this.actions = {
     'yes': function() {
       this.manager.closeCurrent();
@@ -19,5 +20,6 @@ ErrorScreen.prototype.update = function(time) {
 };
 ErrorScreen.prototype.render = function(display) {
   display.clearScreen();
-  Game.Text.drawText(display, 'center', 6, this.message);
+  this.text.drawText(display, 'center', 6, this.message);
+  display.outputBuffer();
 };
