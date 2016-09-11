@@ -29,7 +29,7 @@ function initGame(imageData) {
   bindInput('y', 'yes', Game.Screen.sendCurrent, Game.Screen);
   bindInput('n', 'no', Game.Screen.sendCurrent, Game.Screen);
 
-  Game.Screen.open(new MainScreen(Game.Sound));
+  Game.Screen.open(new MainScreen(Game));
 }
 
 var timeStep = 400;

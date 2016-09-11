@@ -61,11 +61,22 @@ var PixelDisplay = function(canvas, pixelSize) {
   this.clearScreen();
 };
 
+PixelDisplay.prototype.drawPixel = function (x, y, on) {
+
+};
+
+PixelDisplay.bufferPixel = function(x, y, on) {
+
+};
+
 PixelDisplay.prototype.drawPixel = function (x, y, on){
   if (x < 0 || x >= this.pixelWidth || y < 0 || y >= this.pixelHeight) {
     return;
   }
   if (on) {
+    this.ctx.fillStyle = '#DCF0E6';
+    this.ctx.shadowColor = 'transparent';
+    this.ctx.fillRect(x * this.pixelSize, y * this.pixelSize, this.pixelSize, this.pixelSize);
     this.ctx.fillStyle = 'rgba(40, 40, 40, 0.85)';
     this.ctx.shadowOffsetX = 1;
     this.ctx.shadowOffsetY = 1;
@@ -73,6 +84,9 @@ PixelDisplay.prototype.drawPixel = function (x, y, on){
     this.ctx.shadowColor = '#888';
     this.ctx.fillRect(x * this.pixelSize + 1, y * this.pixelSize + 1, this.pixelSize - 1 * 2, this.pixelSize - 1 * 2);
   } else {
+    this.ctx.fillStyle = '#DCF0E6';
+    this.ctx.shadowColor = 'transparent';
+    this.ctx.fillRect(x * this.pixelSize, y * this.pixelSize, this.pixelSize, this.pixelSize);
     this.ctx.fillStyle = 'rgba(40, 40, 40, 0.05)';
     this.ctx.fillRect(x * this.pixelSize + 1, y * this.pixelSize + 1, this.pixelSize - 1 * 2, this.pixelSize - 1 * 2);
   }
@@ -96,15 +110,15 @@ PixelDisplay.prototype.drawTile = function(tileData, tileCol, tileRow, screenX, 
   }
 };
 
-PixelDisplay.prototype.drawVerticalLine = function(x, y0, length) {
+PixelDisplay.prototype.drawVerticalLine = function(x, y0, length, on) {
   for (var y = y0; y < y0 + length; y++) {
-    this.drawPixel(x, y, true);
+    this.drawPixel(x, y, on);
   }
 };
 
-PixelDisplay.prototype.drawHorizontalLine = function(x0, y, length) {
+PixelDisplay.prototype.drawHorizontalLine = function(x0, y, length, on) {
   for (var x = x0; x < x0 + length; x++) {
-    this.drawPixel(x, y, true);
+    this.drawPixel(x, y, on);
   }
 };
 
@@ -117,3 +131,4 @@ PixelDisplay.prototype.clearScreen = function() {
     }
   }
 };
+

@@ -16,10 +16,15 @@ function Pet(options) {
   this.hungry = 0;
   this.filthy = 0;
   this.sick   = 0;
+  this.happy  = 0;
 
-  this.boredRate  = 5;
-  this.hungryRate = 5;
-  this.filthyRate = 5;
+  this.digested = 0;
+  this.filth = 0;
+  this.ill = 0;
+
+  this.boredRate  = 2;
+  this.hungryRate = 2;
+  this.filthyRate = 2;
 
   this.boredTolerance  = 50;
   this.hungryTolerance = 50;
@@ -36,8 +41,20 @@ Pet.prototype.update = function(time) {
   this.millisecondsAlive += time;
 
   this.bored  += this.boredRate  * 0.001 * time;
-  this.hungry += this.hungryRate * 0.001 * time;
-  this.filthy += this.filthyRate * 0.001 * time;
+
+  if (this.hungry < 100) {
+    this.hungry += this.hungryRate * 0.001 * time;
+    this.digested += this.hungryRate * 0.001 * time;
+  }
+
+  // Hunger becomes digested and creates filth tokens;
+  if (this.digested > 50) {
+    this.digested = 0;
+    this.hungry += 5;
+    this.filth++;
+  }
+
+  this.filthy += this.filthyRate * 0.001 * time * (this.filth * 5 + 1);
 
   this.whineCooldown -= 0.001 * time;
 
@@ -47,6 +64,13 @@ Pet.prototype.update = function(time) {
 
   if (this.hungry > 75) {
     this.sick += this.hungry * 0.00005 * time;
+  }
+
+  // Sickness becomes an illness token;
+  if (this.sick > this.sickTolerance * 1.5) {
+    this.happy += -50;
+    this.sick = 0;
+    this.ill++;
   }
 
   if  (!this.whining && this.whineCooldown < 0) {
@@ -67,14 +91,68 @@ Pet.prototype.update = function(time) {
     } 
   }
 
-  this.x += Math.random() > 0.5 ? 1 : -1;
+  if (this.x > 10) {
+    this.dirs = [0,0];
+  }
+
+  if (this.x < 0) {
+    this.dirs = [1,1];
+  }
+
+  this.x += this.dirs[0] ? 1 : -1;
   this.mood = this.mood ? 0 : 1;
 };
 
-// Pet.prototype.feed = function(food) {
-//   this.hungry -= food.nutrition;
-//   this.sick += food.junk;
-// };
+Pet.prototype.play = function() {
+  if (this.bored < 25) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+Pet.prototype.wonGame = function() {
+  this.bored += -30;
+  this.happiness += 10;
+};
+
+Pet.prototype.lostGame = function() {
+  this.bored += -20;
+};
+
+
+Pet.prototype.feed = function(food) {
+  if (this.hungry < food.nutrition / 2) {
+    return false;
+  } else {
+    this.happy += food.tastiness;    
+    this.hungry += -food.nutrition;
+    this.sick += food.junk;
+    return true;
+  }
+};
+
+Pet.prototype.clean = function() {
+  if (this.filth === 0) {
+    return false;
+  } else {
+    this.happy += 20;
+    this.filthy = 0;
+    this.filth = 0;
+    return true;
+  }
+};
+
+Pet.prototype.medicate = function() {
+  if (this.ill === 0) {
+    return false;
+  } else {
+    this.happy += 20;
+    this.sick = 0;
+    this.ill = 0;
+    return true;
+  }
+};
 
 Pet.prototype.whine = function() {
   console.log('WAA');
@@ -88,7 +166,6 @@ Pet.prototype.stopWhining = function() {
   this.whineCooldown = 10;
 };
 
-
 Pet.prototype.debugStats = function() {
   console.log('BORED:  ', parseInt(this.bored, 10));
   console.log('HUNGRY: ', parseInt(this.hungry, 10));
@@ -101,6 +178,15 @@ Pet.prototype.render = function(display) {
   var currentFrame = Game.ticks % 2 ? this.frames[0] : this.frames[1];
   this._drawPetTile(display, this.x, 0, currentFrame, this.form[0] * 2, this.dirs[0]);
   this._drawPetTile(display, this.x, this.tileData.tileHeight, currentFrame, this.form[1] * 2 + 1, this.dirs[1]);
+};
+
+Pet.prototype.renderStatus = function(display) {
+  if (this.filth) {
+    display.drawTile(Game.icons, Game.ticks % 2, 1, 24, 8);
+  }
+  if (this.ill) {
+    display.drawTile(Game.icons, Game.ticks % 2, 0, 24, 0);
+  }
 };
 
 /** @private */

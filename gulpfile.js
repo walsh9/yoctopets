@@ -20,7 +20,8 @@ var concatOrder = [
   'src/food.js',
   'src/pet.js',
   'src/printer.js',
-  'src/screens.js',
+  'src/screen-manager.js',
+  'src/screens/*.js',
   'src/game.js',      
 ];
 
@@ -132,7 +133,7 @@ gulp.task('copy:dev', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch('src/*.js', gulp.series('build:dev'));
+  gulp.watch('src/**/*.js', gulp.series('build:dev'));
   gulp.watch('src/*.{html}', gulp.series('copy:dev'));
   gulp.watch('src/*.{css}', gulp.series('css:dev'));;
 });
