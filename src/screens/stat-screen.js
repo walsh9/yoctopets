@@ -1,8 +1,9 @@
 /** @constructor */
 var StatScreen = function(game) {
-  this.pet = game.Pet;
-  this.text = game.Text;
-  this.sound = game.Sound;
+  this.game = game;
+  this.pet = game.pet;
+  this.text = game.text;
+  this.sound = game.sound;
   this.currentPage = 0;
   this.actions = {
     'yes': function() {
@@ -21,14 +22,18 @@ var StatScreen = function(game) {
 };
 StatScreen.prototype.update = function() {};
 StatScreen.prototype.render = function(display) {
-  var age = 'yrs ' + Math.floor(this.pet.millisecondsAlive / 30000);
-  var weight = 'lbs ' + Math.floor(this.pet.weight * 10) / 10;
+  var name = this.pet.name;
+  var age = 'yrs ' + this.pet.ageInYears();
+
+  if (this.pet.whining && this.game.ticks % 2 === 0) {
+      this.sound.beep(500, 600, 'sawtooth', 0.3);
+  }
 
   display.clearScreen();
   switch(this.currentPage) {
   case 0:
-    this.text.drawText(display, 2, 1, age);
-    this.text.drawText(display, 2, 7, weight);
+    this.text.drawText(display, 2, 1, name);
+    this.text.drawText(display, 2, 7, age);
   break;
   case 1:
     this.text.drawText(display, 2, 1, 'hungry');

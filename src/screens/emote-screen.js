@@ -1,7 +1,7 @@
 /** @constructor */
 var EmoteScreen = function(game, params) {
   this.game = game;
-  this.pet = game.Pet;
+  this.pet = game.pet;
   this.emote = params.emote;
   this.oldFrames = this.pet.frames;
   this.countdown = params.duration || 6;
@@ -38,5 +38,4 @@ EmoteScreen.prototype.render = function(display) {
   display.drawTile(this.game.icons, this.game.ticks % 2, this.icon, 24, 1);
   display.drawTile(this.game.icons, this.game.ticks % 2, this.icon, 0, 1);
   display.outputBuffer();
-
 };

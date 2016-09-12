@@ -1,13 +1,15 @@
-//@constructor;
-var HorizontalWipe = function() {
+/** @constructor */
+var HorizontalWipe = function(game) {
+  this.game = game;
+  this.originalSpeed = game.timeStep;
+  game.timeStep = 40;
   this.x = 0;
-  timeStep = 40;
   this.actions = {};
 };
 HorizontalWipe.prototype.update = function() {
   if (this.x > 32) {
     this.manager.closeCurrent();
-    timeStep = 400;
+    this.game.timeStep = this.originalSpeed;
     return;
   }
   this.x++;
@@ -20,15 +22,18 @@ HorizontalWipe.prototype.render = function(display) {
   display.outputBuffer();
 };
 
-var VerticalWipe = function() {
+/** @constructor */
+var VerticalWipe = function(game) {
+  this.game = game;
+  this.originalSpeed = game.timeStep;
+  game.timeStep = 80;
   this.y = 0;
-  timeStep = 80;
   this.actions = {};
 };
 VerticalWipe.prototype.update = function() {
   if (this.y > 16) {
     this.manager.closeCurrent();
-    timeStep = 400;
+    this.game.timeStep = this.originalSpeed;
     return;
   }
   this.y++;

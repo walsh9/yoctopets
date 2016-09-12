@@ -1,9 +1,9 @@
  /** @constructor */
 var MiniGameScreen = function(game) {
   this.game = game;
-  this.sound = game.Sound;
-  this.text = game.Text;
-  this.pet = game.Pet;
+  this.sound = game.sound;
+  this.text = game.text;
+  this.pet = game.pet;
   this.deck = '23456789jqka'.split('');
   this.cards = shuffle(this.deck).slice(-4);
   this.selection = '<hi>';
@@ -56,7 +56,7 @@ MiniGameScreen.prototype.update = function(time) {
 MiniGameScreen.prototype.render = function(display) { 
   var petFrame = Game.ticks % 2;
   display.clearScreen();
-  display.drawTile(this.pet.tileData, petFrame, this.pet.form[0] * 2, 16, 0);
+  display.drawTile(this.pet.tileData, petFrame, this.pet.form[0] * (this.pet.isBaby ? 1 : 2), 16, 0);
   display.drawVerticalLine(14, 8, 8, true);
   display.drawHorizontalLine(14, 8, 18, true);
   this.renderCard(display, 0, 0, 0);
@@ -72,6 +72,7 @@ MiniGameScreen.prototype.toggleSelection = function() {
   } else {
     this.selection = '<hi>';
   }
+  this.sound.beep(2000, 3100, 'square', 0.2);
 };
 MiniGameScreen.prototype.renderCard = function(display, cardIndex, x, y) {
   if (cardIndex < this.revealedCards) {

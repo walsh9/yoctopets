@@ -1,6 +1,9 @@
 /** @constructor */
 var ClockScreen = function(game) {
-  this.text = game.Text;
+  this.game = game;
+  this.pet = game.pet;
+  this.sound = game.sound;
+  this.text = game.text;
   this.actions = {
     'yes': function() {
       this.manager.closeCurrent();
@@ -18,10 +21,13 @@ ClockScreen.prototype.render = function(display) {
   hours = hours < 10 ? ' ' + hours : hours;
   var amPm = now.getHours() < 12 ? 'am' : 'pm';
   var year = '1996';
+
+  if (this.pet.whining && this.game.ticks % 2 === 0) {
+    this.sound.beep(500, 600, 'sawtooth', 0.3);
+  }
   
   display.clearScreen();
   this.text.drawText(display, 2, 2, hours + ':' + minutes + amPm);
   this.text.drawText(display, 7, 9, year);
   display.outputBuffer();
-
 };

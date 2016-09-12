@@ -38,3 +38,13 @@ ScreenManager.prototype.open = function(screen) {
   screen.manager = this;
   this.screenStack.push(screen);
 };
+
+ScreenManager.prototype.insert = function(screen, n) {
+  screen.manager = this;
+  if (this.screenStack.length <= n) {
+    this.sendCurrent('switchOut');
+    this.screenStack.push(screen);
+  } else {
+    this.screenStack.splice(n, 0, screen);
+  }
+};

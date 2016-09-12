@@ -1,8 +1,8 @@
 /** @constructor */
 var ErrorScreen = function(game, params) {
-  this.text = game.Text;
+  this.text = game.text;
   this.message = params.message;
-  this.time = parms.duration;
+  this.time = params.duration;
   this.actions = {
     'yes': function() {
       this.manager.closeCurrent();

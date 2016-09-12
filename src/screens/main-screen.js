@@ -1,9 +1,9 @@
 /** @constructor */
 var MainScreen = function(game) {
   this.game = game;
-  this.sound = game.Sound;
-  this.printer = game.Printer;
-  this.pet = game.Pet;
+  this.sound = game.sound;
+  this.printer = game.printer;
+  this.pet = game.pet;
   this.selectedIcon = 0;
   this.actions = {
     'switchIn': function() {
@@ -26,6 +26,7 @@ var MainScreen = function(game) {
         if (this.pet.clean()) {
           this.manager.open(new EmoteScreen(this.game, {emote: 'approve', duration: 6}));
           this.manager.open(new HorizontalWipe(this.game));
+          Game.sound.beep(1000, 1900, 'sawtooth', 3);
         } else {
           this.manager.open(new EmoteScreen(this.game, {emote:'refuse'}));
         }
@@ -40,7 +41,8 @@ var MainScreen = function(game) {
       case 3:
         if (this.pet.medicate()) {
           this.manager.open(new EmoteScreen(this.game, {emote: 'approve', duration: 6}));
-          this.manager.open(new VerticalWipe());          
+          this.manager.open(new VerticalWipe(this.game));          
+          this.sound.beep(200, 300, 'sawtooth', 2);
         } else {
           this.manager.open(new EmoteScreen(this.game, {emote: 'refuse'}));
         }
@@ -65,6 +67,9 @@ MainScreen.prototype.render = function(display) {
   display.clearScreen();
   this.pet.render(display);  
   this.pet.renderStatus(display);
+  if (this.pet.whining && this.game.ticks % 2 === 0) {
+      this.sound.beep(500, 600, 'sawtooth', 0.3);
+  }
   display.outputBuffer();
 };
 MainScreen.prototype.update  = function() {};

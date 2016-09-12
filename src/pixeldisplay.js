@@ -1,5 +1,6 @@
 /** @constructor */
-var PixelDisplay = function(canvas, pixelSize) {
+var PixelDisplay = function(canvas, pixelSize, game) {
+  this.game = game;
   this.canvas = canvas;
   this.ctx = canvas.getContext('2d');
   this.w = canvas.width;
@@ -12,6 +13,8 @@ var PixelDisplay = function(canvas, pixelSize) {
     this.displayBuffer[y] = [];
   }
   this.clearScreen();
+  this.glitchBits = [false, false];
+  this.life = 1;
 };
 
 
@@ -28,13 +31,71 @@ PixelDisplay.prototype.outputBuffer = function () {
       self.drawPixel(x, y, self.displayBuffer[y][x]);
     });
   });
+  if (this.life > 0) {
+
+  }
 };
+
+// PixelDisplay.prototype.lifeStep = function() {
+//   var pd = this.pixelDisplay;
+//     var neighbors = [];
+//     pd.map(function(row, y){
+//       return row.map(pixel, x) {
+//         if countNeighbors(pd, x, y) 
+//       }
+//     if (x > 0) {
+//       if (y > 0) {
+//           neighbors.push(pd[y-1][x-1]);
+//         }
+//         neighbors.push(pd[y][x-1]);
+//         if (y < this.pixelHeight - 1) {
+//           neighbors.push(pd[y+1][x-1]);
+//         }
+//       }
+//       if (y > 0) {
+//           neighbors.push(pd[y-1][x]);
+//       }
+//       if (y < self.pixelHeight - 1) {
+//           neighbors.push(pd[y+1][x]);
+//       }
+//       if (x < self.pixelWidth - 1) {
+//         if (y > 0) {
+//           neighbors.push(pd[y-1][x+1]);
+//         }
+//         neighbors.push(pd[y][x + 1]);
+//         if (y < self.pixelHeight + 1) {
+//           neighbors.push(pd[y+1][x+1]);
+//         }
+//       }
+//       var liveNeighbors = neighbors.map(function (isTrue) {
+//               return isTrue ? 1 : 0;
+//           }) //map bool to int
+//           .reduce(function (a, b) {
+//               return a + b;
+//           }); //sum
+//       if (value === true) { // this cell is 'alive'
+//           if (liveNeighbors < 2 || liveNeighbors > 3) {
+//               return false;
+//           } else {
+//               return true;
+//           }
+//       } else { //this cell is 'dead'
+//           if (liveNeighbors === 3) {
+//               return true;
+//           } else {
+//               return false;
+//           }
+//       }
+//   });
+//   this.rawArray = newFrame.rawArray.slice();
+//   return this;
+// };
 
 PixelDisplay.prototype.drawPixel = function (x, y, on){
   if (x < 0 || x >= this.pixelWidth || y < 0 || y >= this.pixelHeight) {
     return;
   }
-  if (on) {
+  if (on && !(this.glitchBits[1] && Math.random() > 0.8)) {
     this.ctx.fillStyle = '#DCF0E6';
     this.ctx.shadowColor = 'transparent';
     this.ctx.fillRect(x * this.pixelSize, y * this.pixelSize, this.pixelSize, this.pixelSize);
@@ -65,6 +126,9 @@ PixelDisplay.prototype.drawTile = function(tileData, tileCol, tileRow, screenX, 
     var tilePixel = (tileX + tileY * tileData.width) * 4 + 3;
     if (tileData.data[tilePixel]) {
       this.bufferPixel(screenX + xOffset, screenY + yOffset, 1);
+      if (this.glitchBits[0] && this.game.ticks % 2 === 0) {
+        this.bufferPixel(this.pixelWidth - screenX -  xOffset, screenY + yOffset, 1);
+      }
     }
   }
 };

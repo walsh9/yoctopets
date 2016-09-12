@@ -1,3 +1,5 @@
+var Game = {};
+
 function initGame(imageData) {
   var petTiles = Graphics.initTiles(imageData[0], PET_TILE_WIDTH, PET_TILE_HEIGHT);
   var fontTiles = Graphics.initTiles(imageData[1], FONT_TILE_WIDTH,FONT_TILE_HEIGHT);
@@ -6,39 +8,40 @@ function initGame(imageData) {
   Game.icons = Graphics.initTiles(imageData[3], ICON_TILE_WIDTH, ICON_TILE_HEIGHT);
 
   Game.ticks = 0;
-  Game.Sound = new BeepMaker();
-  Game.Display = new PixelDisplay(CANVAS, PIXEL_SIZE);
+  Game.sound = new BeepMaker();
+  Game.display = new PixelDisplay(CANVAS, PIXEL_SIZE, Game);
 
-  Game.Printer = new Printer(Game.Display, Game.Sound, '#p');
-  Game.Food = new Food(FOOD_MENU, foodTiles);
-  Game.Pet = new Pet({tileData: petTiles});
-  Game.Text = new TextDrawer({
+  Game.printer = new Printer(Game.display, Game.sound, '#p');
+  Game.food = new Food(FOOD_MENU, foodTiles);
+  Game.pet = new Pet({tileData: petTiles, game: Game});
+  Game.text = new TextDrawer({
     tileData: fontTiles, 
     letters: "abcdefghijklmnopqrstuvwxyz1234567890.!?:;+-'\" <>()[]{}#|"
   });
 
-  Game.Screen = new ScreenManager();
+  Game.screens = new ScreenManager();
 
   function bindInput(id, message, callback, context) {
     document.querySelector('#' + id).addEventListener('click', function() {
       callback.call(context, message);
     });
   }
-  bindInput('l', 'left', Game.Screen.sendCurrent, Game.Screen);
-  bindInput('r', 'right', Game.Screen.sendCurrent, Game.Screen);
-  bindInput('y', 'yes', Game.Screen.sendCurrent, Game.Screen);
-  bindInput('n', 'no', Game.Screen.sendCurrent, Game.Screen);
+  bindInput('l', 'left', Game.screens.sendCurrent, Game.screens);
+  bindInput('r', 'right', Game.screens.sendCurrent, Game.screens);
+  bindInput('y', 'yes', Game.screens.sendCurrent, Game.screens);
+  bindInput('n', 'no', Game.screens.sendCurrent, Game.screens);
 
-  Game.Screen.open(new MainScreen(Game));
+  Game.screens.open(new MainScreen(Game));
+  Game.screens.open(new EggScreen(Game));
 }
 
-var timeStep = 400;
+Game.timeStep = 400;
 function run() {
   Game.ticks++;
-  Game.Pet.update(timeStep);
-  Game.Screen.updateCurrent(timeStep);
-  Game.Screen.renderCurrent(Game.Display);
-  setTimeout(run, timeStep);
+  Game.pet.update(Game.timeStep);
+  Game.screens.updateCurrent(Game.timeStep);
+  Game.screens.renderCurrent(Game.display);
+  setTimeout(run, Game.timeStep);
 }
 
 Promise.all([

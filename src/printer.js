@@ -7,7 +7,7 @@ var Printer = function(display, sound, selector) {
   this.display = display;
   this.sound = sound;
   this.ink = 1000;
-  this.paperCount = 20;
+  this.paperCount = 10;
   this.elem = document.querySelector(selector);
   this.busy = false;
 };
@@ -19,7 +19,7 @@ Printer.prototype.print = function() {
   if (this.paperCount <= 0) {
     return 'no paper';
   }
-  if (this.ink < 300) {
+  if (this.ink < 0) {
     return 'no ink';
   }
   this.busy = true;
@@ -59,7 +59,6 @@ Printer.prototype.printToPage = function(rows, ctx, paper) {
         return prevPromise.then(function() {
           return self.printRow(ctx, row, totalRows - (y * PRINTER_DPD + dotRow));
         }).then(function() {
-          //self.sound.beep(200, 0.01, 'triangle', 0.2, 0.0);
           return Graphics.linearTween(self.paper.style, 'top', PRINTER_DOT_SIZE, 50);
         });
       }, Promise.resolve());
@@ -89,8 +88,8 @@ Printer.prototype.printDot = function(ctx, dotX, dotY, dot) {
       ctx.beginPath();
       ctx.arc(dotX * PRINTER_DOT_SIZE + randomOffset + PRINTER_MARGIN, dotY * PRINTER_DOT_SIZE + PRINTER_MARGIN, PRINTER_DOT_SIZE, 0, Math.PI*2, true);
       ctx.fill();
-      self.ink -= 0.05;
-      self.sound.beep(1000, 1000, 'sawtooth', 0.15, 0.025);
+      self.ink -= 0.17;
+      self.sound.pureBeep(1000, 1000, 'sawtooth', 0.15, 0.025);
       if (dotX % PRINTER_DPD === 0) {
         window.setTimeout(resolve, 15);
       } else {
