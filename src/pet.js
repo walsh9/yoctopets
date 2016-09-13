@@ -105,7 +105,7 @@ Pet.prototype.updateSick = function(time) {
 
 Pet.prototype.setMood = function() {
   this.frames = [0,1];
-  if (Game.ticks % 17 === 0) {
+  if (Game.ticks % 13 === 0) {
     if (this.happy > 80) {
       this.frames = [0,7];
     } else if (this.happy < 20) {
@@ -208,7 +208,9 @@ Pet.prototype.feed = function(food) {
 Pet.prototype.applyGlitch = function(glitch) {
   switch(glitch) { //nice rhyme
   case 'faster':
-    this.game.timeStep = this.game.timeStep * 0.74;
+    this.sound.beep(500, 800, 'sawtooth', 1); 
+    this.sound.beep(800, 500, 'sawtooth', 1);
+    this.game.timeStep = Math.max(50, this.game.timeStep * 0.74);
     break;
   case 'morph':
     this.sound.beep(500, 800, 'sawtooth', 1); 
@@ -216,14 +218,23 @@ Pet.prototype.applyGlitch = function(glitch) {
     this.form[1] = Math.randomInt(1,8);
     break;
   case 'sound':
-    this.sound.freqMutator = Math.randomBetween(0.5, 1.5);
-    this.sound.freq2Mutator = Math.randomBetween(0.5, 1.5);
-    this.sound.timeMutator = Math.randomBetween(0.5, 1.5);
+    this.sound.freqMutator = Math.randomBetween(0.8, 1.2);
+    this.sound.freq2Mutator = Math.randomBetween(0.2, 1.2);
+    this.sound.timeMutator = Math.randomBetween(0.5, 1.2);
+    this.sound.beep(500, 800, 'sawtooth', 1); 
+    this.sound.beep(800, 500, 'sawtooth', 1);
     break;
   case 'graphics':
+    this.sound.beep(500, 800, 'sawtooth', 1); 
+    this.sound.beep(800, 500, 'sawtooth', 1);
     var glitchBitCount = this.game.display.glitchBits.length;
     var randomGlitchBit = Math.randomInt(0, glitchBitCount - 1);
     this.game.display.glitchBits[randomGlitchBit] = !this.game.display.glitchBits[randomGlitchBit];
+    break;
+  case 'life':
+    this.sound.beep(500, 800, 'sawtooth', 1); 
+    this.sound.beep(800, 500, 'sawtooth', 1);
+    this.game.display.lifeGlitch = Math.min(5, this.game.display.lifeGlitch + 1);
     break;
   }
 };

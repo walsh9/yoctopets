@@ -11,7 +11,7 @@ function initGame(imageData) {
   Game.sound = new BeepMaker();
   Game.display = new PixelDisplay(CANVAS, PIXEL_SIZE, Game);
 
-  Game.printer = new Printer(Game.display, Game.sound, '#p');
+  Game.printer = new Printer(Game, '#p');
   Game.food = new Food(FOOD_MENU, foodTiles);
   Game.pet = new Pet({tileData: petTiles, game: Game});
   Game.text = new TextDrawer({

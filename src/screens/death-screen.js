@@ -1,6 +1,7 @@
 /** @constructor */
 var DeathScreen = function(game) {
-  game.sound.playNotes(CHOPINS_FUNERAL_MARCH);
+  var deathDitty = Math.random() < 0.75 ? CHOPINS_FUNERAL_MARCH : SHAVE_AND_A_HAIRCUT;
+  game.sound.playNotes(deathDitty);
   this.name = game.pet.name || '';
   this.text = game.text;
   this.actions = {};
@@ -15,6 +16,5 @@ DeathScreen.prototype.render = function(display) {
   display.drawVerticalLine(26, 2, 15, true);
   this.text.drawText(display, 'center', 3, 'rip');
   this.text.drawText(display, 'center', 9, this.name);
-
   display.outputBuffer();
 };

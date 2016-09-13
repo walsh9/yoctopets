@@ -3,9 +3,10 @@ var PRINTER_DPD = 4;
 var PRINTER_MARGIN = 5;
 
 /** @constructor */
-var Printer = function(display, sound, selector) {
-  this.display = display;
-  this.sound = sound;
+var Printer = function(game, selector) {
+  this.game = game;
+  this.display = game.display;
+  this.sound = game.sound;
   this.ink = 1000;
   this.paperCount = 10;
   this.elem = document.querySelector(selector);
@@ -23,12 +24,10 @@ Printer.prototype.print = function() {
     return 'no ink';
   }
   this.busy = true;
-  var rows = this.display.displayBuffer.slice().map(function(row) {
-    return row.slice();
-  }).reverse();
-    var canvas = document.createElement('canvas');
-    canvas.width = PRINTER_DOT_SIZE * PRINTER_DPD * rows[0].length + PRINTER_MARGIN * 2;
-    canvas.height = PRINTER_DOT_SIZE * PRINTER_DPD * rows.length + PRINTER_MARGIN * 2;
+  var rows = clone2d(this.display.displayBuffer).reverse();
+  var canvas = document.createElement('canvas');
+  canvas.width = PRINTER_DOT_SIZE * PRINTER_DPD * rows[0].length + PRINTER_MARGIN * 2;
+  canvas.height = PRINTER_DOT_SIZE * PRINTER_DPD * rows.length + PRINTER_MARGIN * 2;
   if (!this.paper) {
     this.paper = document.createElement('div');
     this.paper.classList.add('paper');
@@ -39,14 +38,40 @@ Printer.prototype.print = function() {
   this.paper.height += canvas.height + 'px';
   if (parseInt(this.paper.style.top, 10) > 0) {
     this.paper.style.top = parseInt(this.paper.style.top, 10) - canvas.height + 'px';
-  };
+  }
   this.paper.insertBefore(canvas, this.paper.firstChild);
   var ctx = canvas.getContext('2d');
   var self = this;
   this.printToPage(rows, ctx, this.paper).then(function finished() {
+    self.replaceCanvas(canvas);
     self.busy = false;
   });
   return 'ok';
+};
+
+Printer.prototype.replaceCanvas = function(canvas) {
+  var transparentData = canvas.toDataURL();
+  var niceCanvas = document.createElement('canvas');
+  niceCanvas.width = canvas.width;
+  niceCanvas.height = canvas.height;
+  var ctx = niceCanvas.getContext('2d');
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, niceCanvas.width, niceCanvas.height);
+  ctx.drawImage(canvas, 0, 0);
+  var dataWithBackground = niceCanvas.toDataURL();
+
+  var img = document.createElement('img');
+  img.setAttribute('src', transparentData);
+  var link = document.createElement('a');
+  link.setAttribute('href', dataWithBackground);
+  var downloadAttrSupported = ("download" in link);
+  if (downloadAttrSupported) {
+    link.setAttribute('download', this.game.pet.name);
+  } else {
+    link.setAttribute('target', '_blank');
+  }
+  link.appendChild(img);
+  canvas.parentNode.replaceChild(link, canvas);
 };
 
 Printer.prototype.printToPage = function(rows, ctx, paper) {
@@ -63,7 +88,7 @@ Printer.prototype.printToPage = function(rows, ctx, paper) {
         });
       }, Promise.resolve());
     });
-  }, Promise.resolve());
+  }, Graphics.linearTween(self.paper.style, 'top', PRINTER_MARGIN * 2, 50));
 };
 
 Printer.prototype.printRow = function(ctx, row, dotY) {

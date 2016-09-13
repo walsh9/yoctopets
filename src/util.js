@@ -17,3 +17,9 @@ Math.randomInt = function(min, max) {
 Math.randomBetween = function(min, max) {
   return Math.random() * (max - min + 1) + min;
 };
+
+var clone2d = function(twoDeeArray) {
+  return twoDeeArray.slice().map(function(row) {
+    return row.slice();
+  });
+};

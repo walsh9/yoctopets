@@ -129,14 +129,14 @@ gulp.task('css:dev', function() {
 });
 
 gulp.task('copy:dev', function() {
-  return gulp.src('src/*.{html}')
+  return gulp.src('src/*.html')
     .pipe(gulp.dest('dev'));
 });
 
 gulp.task('watch', function() {
   gulp.watch('src/**/*.js', gulp.series('build:dev'));
-  gulp.watch('src/*.{html}', gulp.series('copy:dev'));
-  gulp.watch('src/*.{css}', gulp.series('css:dev'));;
+  gulp.watch('src/*.html', gulp.series('copy:dev'));
+  gulp.watch('src/*.css', gulp.series('css:dev'));;
 });
 
 

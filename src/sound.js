@@ -66,7 +66,6 @@ BeepMaker.prototype.playNotes = function(notes) {
   if (this.muted) {
     return;
   }
-
   var ctx = this.context;
   var wholeNoteSeconds = 2;
   var startTime = ctx.currentTime;

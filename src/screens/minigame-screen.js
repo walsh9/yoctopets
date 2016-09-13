@@ -4,6 +4,7 @@ var MiniGameScreen = function(game) {
   this.sound = game.sound;
   this.text = game.text;
   this.pet = game.pet;
+  this.icons = game.icons;
   this.deck = '23456789jqka'.split('');
   this.cards = shuffle(this.deck).slice(-4);
   this.selection = '<hi>';
@@ -54,7 +55,7 @@ MiniGameScreen.prototype.update = function(time) {
   }
 };
 MiniGameScreen.prototype.render = function(display) { 
-  var petFrame = Game.ticks % 2;
+  var petFrame = this.game.ticks % 2;
   display.clearScreen();
   display.drawTile(this.pet.tileData, petFrame, this.pet.form[0] * (this.pet.isBaby ? 1 : 2), 16, 0);
   display.drawVerticalLine(14, 8, 8, true);
@@ -76,10 +77,10 @@ MiniGameScreen.prototype.toggleSelection = function() {
 };
 MiniGameScreen.prototype.renderCard = function(display, cardIndex, x, y) {
   if (cardIndex < this.revealedCards) {
-    display.drawTile(Game.icons, 1, 6, x, y);
+    display.drawTile(this.icons, 1, 6, x, y);
     this.text.drawText(display, x + 2, y + 2, this.cards[cardIndex]);
   } else {
-    display.drawTile(Game.icons, 0, 6, x, y);
+    display.drawTile(this.icons, 0, 6, x, y);
   }
 };
 MiniGameScreen.prototype.getCardValue = function(card) {
@@ -93,9 +94,9 @@ MiniGameScreen.prototype.revealCard = function(selection) {
   if ((this.selection === '<hi>' && newCard > oldCard) ||
       (this.selection === '<lo>' && newCard < oldCard)) {
     this.score++;
-    this.sound.beep(1500, 1500, 'sine', 0.4);
+    this.sound.beep(200, 1900, 'sawtooth', 0.8);
   } else {
-    this.sound.beep(300, 300, 'sine', 0.4);
+    this.sound.beep(200, 10, 'sawtooth', 1);
     this.locked += 1;
     this.youLose = true;
   }

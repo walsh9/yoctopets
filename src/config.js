@@ -18,11 +18,11 @@ var FOOD_TILE_HEIGHT = 8;
 var FOOD_MENU = [
   {name:'fruit',  nutrition: 60, flavor: 10, junk:  0},
   {name:'candy',  nutrition: 40, flavor: 30, junk: 10},
-  {name:'t3a',    nutrition: 40, flavor: 20, junk:  0, glitch: 'faster'},
-  {name:'d0nut',  nutrition: 50, flavor: 30, junk: 10, glitch: ''}, 
-  {name:'pi22a',  nutrition: 70, flavor: 50, junk: 20, glitch: 'life'}, 
   {name:'dr1nk',  nutrition: 20, flavor: 20, junk: 10, glitch: 'sound'}, 
-  {name:'pud1ng', nutrition: 50, flavor: 60, junk: 20, glitch: 'morph'}
+  {name:'t3a',    nutrition: 40, flavor: 20, junk:  0, glitch: 'faster'},
+  {name:'pud1ng', nutrition: 50, flavor: 60, junk: 20, glitch: 'morph'},
+  {name:'d0nut',  nutrition: 50, flavor: 30, junk: 10, glitch: 'graphics'}, 
+  {name:'pi22a',  nutrition: 70, flavor: 50, junk: 20, glitch: 'life'}, 
 ]; 
 
 var ICON_TILE_DATA = '@@import status.png';
@@ -35,7 +35,7 @@ var C4 = 263;
 var B3 = 247;
 var A3 = 220;
 var G3 = 196;
-var REST = -1;
+var REST = 0;
 /* shout out to Frédéric Chopin */
 var CHOPINS_FUNERAL_MARCH = [
   {frequency: A3, duration: 1/4},
